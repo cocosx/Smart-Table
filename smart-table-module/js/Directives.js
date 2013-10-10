@@ -75,7 +75,7 @@
                 restrict: 'C',
                 link: function (scope, element, attr, ctrl) {
 
-                    element.bind('click', function () {
+                    element.on('click', function () {
                         scope.$apply(function () {
                             ctrl.toggleSelection(scope.dataRow);
                         })
@@ -89,7 +89,7 @@
                 restrict: 'C',
                 require: '^smartTable',
                 link: function (scope, element, attr, ctrl) {
-                    element.bind('click', function () {
+                    element.on('click', function () {
                         scope.$apply(function () {
                             ctrl.sortBy(scope.column);
                         });
@@ -101,7 +101,7 @@
                 restrict: 'C',
                 require: '^smartTable',
                 link: function (scope, element, attr, ctrl) {
-                    element.bind('click', function (event) {
+                    element.on('click', function (event) {
                         ctrl.toggleSelectionAll(element[0].checked === true);
                     })
                 }
@@ -112,7 +112,7 @@
             return {
                 restrict: 'A',
                 link: function (scope, element, attr) {
-                    element.bind(attr.stopEvent, function (e) {
+                    element.on(attr.stopEvent, function (e) {
                         e.stopPropagation();
                     });
                 }
@@ -249,7 +249,7 @@
                         }
                     });
 
-                    input.bind('blur', function () {
+                    input.on('blur', function () {
                         scope.$apply(function () {
                             scope.submit();
                         });
