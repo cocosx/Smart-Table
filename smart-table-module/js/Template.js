@@ -57,7 +57,7 @@ angular.module("partials/smartTable.html", []).run(["$templateCache", function($
     "    </tr>\n" +
     "    <tr class=\"smart-table-header-row\">\n" +
     "        <th ng-repeat=\"column in columns\" class=\"smart-table-header-cell {{column.headerClass}}\" scope=\"col\">\n" +
-    "            <span ng-include=\\\"column.headerTemplateUrl\\\"></span>\n" +
+    "            <span ng-include=\"column.headerTemplateUrl\"></span>\n" +
     "        </th>\n" +
     "    </tr>\n" +
     "    </thead>\n" +

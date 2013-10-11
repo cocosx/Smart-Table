@@ -32,7 +32,12 @@
                             }
                         } else {
                             //add selection box column if required
-                            ctrl.insertColumn({cellTemplateUrl: templateList.selectionCheckbox, headerTemplateUrl: templateList.selectAllCheckbox, isSelectionColumn: true}, 0);
+                            ctrl.insertColumn({
+                                cellTemplateUrl: templateList.selectionCheckbox,
+                                headerTemplateUrl: templateList.selectAllCheckbox,
+                                isSelectionColumn: true,
+                                isSortable:false
+                            }, 0);
                         }
                     };
 
@@ -93,11 +98,11 @@
                 require: '^smartTable',
                 link: function (scope, element, attr, ctrl) {
                     if(!(element.find('input').hasClass('smart-table-select-all'))) {
-                    element.on('click', function () {
-                        scope.$apply(function () {
-                            ctrl.sortBy(scope.column);
-                        });
-                    })
+                        element.on('click', function () {
+                            scope.$apply(function () {
+                                ctrl.sortBy(scope.column);
+                            });
+                        })
                     }
                 }
             };

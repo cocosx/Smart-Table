@@ -85,7 +85,12 @@
                             }
                         } else {
                             //add selection box column if required
-                            ctrl.insertColumn({cellTemplateUrl: templateList.selectionCheckbox, headerTemplateUrl: templateList.selectAllCheckbox, isSelectionColumn: true}, 0);
+                            ctrl.insertColumn({
+                                cellTemplateUrl: templateList.selectionCheckbox,
+                                headerTemplateUrl: templateList.selectAllCheckbox,
+                                isSelectionColumn: true,
+                                isSortable:false
+                            }, 0);
                         }
                     };
 
@@ -146,11 +151,11 @@
                 require: '^smartTable',
                 link: function (scope, element, attr, ctrl) {
                     if(!(element.find('input').hasClass('smart-table-select-all'))) {
-                    element.on('click', function () {
-                        scope.$apply(function () {
-                            ctrl.sortBy(scope.column);
-                        });
-                    })
+                        element.on('click', function () {
+                            scope.$apply(function () {
+                                ctrl.sortBy(scope.column);
+                            });
+                        })
                     }
                 }
             };
@@ -679,7 +684,7 @@ angular.module("partials/smartTable.html", []).run(["$templateCache", function($
     "    </tr>\n" +
     "    <tr class=\"smart-table-header-row\">\n" +
     "        <th ng-repeat=\"column in columns\" class=\"smart-table-header-cell {{column.headerClass}}\" scope=\"col\">\n" +
-    "            <span ng-include=\\\"column.headerTemplateUrl\\\"></span>\n" +
+    "            <span ng-include=\"column.headerTemplateUrl\"></span>\n" +
     "        </th>\n" +
     "    </tr>\n" +
     "    </thead>\n" +
