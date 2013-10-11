@@ -70,7 +70,7 @@
 
                     var templateObject;
 
-                    scope.$watch('config', function (config) {
+                    var configWatch = function (config) {
                         var newConfig = angular.extend({}, defaultConfig, config),
                             length = scope.columns !== undefined ? scope.columns.length : 0;
 
@@ -87,12 +87,15 @@
                             //add selection box column if required
                             ctrl.insertColumn({cellTemplateUrl: templateList.selectionCheckbox, headerTemplateUrl: templateList.selectAllCheckbox, isSelectionColumn: true}, 0);
                         }
-                    }, true);
+                    };
+
+                    scope.$watch('config', configWatch , true);
 
                     //insert columns from column config
                     scope.$watch('columnCollection', function (oldValue, newValue) {
 
                         ctrl.clearColumns();
+                        configWatch(scope.config);
 
                         if (scope.columnCollection) {
                             for (var i = 0, l = scope.columnCollection.length; i < l; i++) {
@@ -142,11 +145,13 @@
                 restrict: 'C',
                 require: '^smartTable',
                 link: function (scope, element, attr, ctrl) {
+                    if(!(element.find('input').hasClass('smart-table-select-all'))) {
                     element.on('click', function () {
                         scope.$apply(function () {
                             ctrl.sortBy(scope.column);
                         });
                     })
+                    }
                 }
             };
         }).directive('smartTableSelectAll', function () {
@@ -647,7 +652,7 @@ angular.module("partials/globalSearchCell.html", []).run(["$templateCache", func
 angular.module("partials/pagination.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("partials/pagination.html",
     "<div class=\"pagination\">\n" +
-    "    <ul>\n" +
+    "    <ul class=\"pagination\">\n" +
     "        <li ng-repeat=\"page in pages\" ng-class=\"{active: page.active, disabled: page.disabled}\"><a\n" +
     "                ng-click=\"selectPage(page.number)\">{{page.text}}</a></li>\n" +
     "    </ul>\n" +
@@ -674,17 +679,17 @@ angular.module("partials/smartTable.html", []).run(["$templateCache", function($
     "    </tr>\n" +
     "    <tr class=\"smart-table-header-row\">\n" +
     "        <th ng-repeat=\"column in columns\" class=\"smart-table-header-cell {{column.headerClass}}\" scope=\"col\">\n" +
-    "            <span class=\"header-content\" ng-class=\"{'sort-ascent':column.reverse==true,'sort-descent':column.reverse==false}\">{{column.label}}</span>\n" +
+    "            <span ng-include=\\\"column.headerTemplateUrl\\\"></span>\n" +
     "        </th>\n" +
     "    </tr>\n" +
     "    </thead>\n" +
     "    <tbody>\n" +
-    "    <tr ng-repeat=\"dataRow in displayedCollection\" ng-class=\"{selected:dataRow.isSelected}\"\n" +
+    "    <tr ng-repeat=\"dataRow in displayedCollection\" ng-class=\"{selected:dataRow.isSelected, success:dataRow.isSelected}\"\n" +
     "        class=\"smart-table-data-row\">\n" +
     "        <td ng-repeat=\"column in columns\" class=\"smart-table-data-cell {{column.cellClass}}\"></td>\n" +
     "    </tr>\n" +
     "    </tbody>\n" +
-    "    <tfoot ng-show=\"isPaginationEnabled\">\n" +
+    "    <tfoot ng-show=\"isPaginationEnabled && numberOfPages>1\">\n" +
     "    <tr class=\"smart-table-footer-row\">\n" +
     "        <td colspan=\"{{columns.length}}\">\n" +
     "            <div pagination-smart-table=\"\" num-pages=\"numberOfPages\" max-size=\"maxSize\" current-page=\"currentPage\"></div>\n" +

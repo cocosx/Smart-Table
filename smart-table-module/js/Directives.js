@@ -17,7 +17,7 @@
 
                     var templateObject;
 
-                    scope.$watch('config', function (config) {
+                    var configWatch = function (config) {
                         var newConfig = angular.extend({}, defaultConfig, config),
                             length = scope.columns !== undefined ? scope.columns.length : 0;
 
@@ -34,12 +34,15 @@
                             //add selection box column if required
                             ctrl.insertColumn({cellTemplateUrl: templateList.selectionCheckbox, headerTemplateUrl: templateList.selectAllCheckbox, isSelectionColumn: true}, 0);
                         }
-                    }, true);
+                    };
+
+                    scope.$watch('config', configWatch , true);
 
                     //insert columns from column config
                     scope.$watch('columnCollection', function (oldValue, newValue) {
 
                         ctrl.clearColumns();
+                        configWatch(scope.config);
 
                         if (scope.columnCollection) {
                             for (var i = 0, l = scope.columnCollection.length; i < l; i++) {
@@ -89,11 +92,13 @@
                 restrict: 'C',
                 require: '^smartTable',
                 link: function (scope, element, attr, ctrl) {
+                    if(!(element.find('input').hasClass('smart-table-select-all'))) {
                     element.on('click', function () {
                         scope.$apply(function () {
                             ctrl.sortBy(scope.column);
                         });
                     })
+                    }
                 }
             };
         }).directive('smartTableSelectAll', function () {
